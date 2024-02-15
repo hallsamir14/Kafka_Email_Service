@@ -27,7 +27,7 @@ def md_to_html(filePath: str) -> str:
 
 
 # Send directly to mailtrap fake SMTP-----------------------------------
-def send_mailTrap_email(sender: str, reciever: str, subject: str, markdown_path: str):
+def send_mailTrap_email(sender: str, reciever: str, subject: str, markdown_path: str) -> None:
 
     sender_addr: str = sender
     receiver_addr: str = reciever
@@ -61,7 +61,7 @@ def send_mailTrap_email(sender: str, reciever: str, subject: str, markdown_path:
 # Send to real email inbox------------------------------------------------
 
 
-def send_email(sender: str, reciever: str, subject: str, markdown_path: str):
+def send_email(sender: str, reciever: str, subject: str, markdown_path: str) -> None:
 
     sender_addr: str = sender
     receiver_addr: str = reciever
