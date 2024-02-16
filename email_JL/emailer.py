@@ -1,10 +1,9 @@
 import os
 import smtplib
-import markdown2
+import markdown2    
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from dotenv import load_dotenv
-from faker import Faker
 from abc import ABC, abstractmethod
 
 # Load environmental variables
@@ -53,16 +52,4 @@ class EmailApplication:
         html_content = self.markdown_converter.convert_to_html(markdown_path)
         self.email_sender.send_email(sender, receiver, subject, html_content)
 
-def main():
-    email_sender = MailtrapEmailSender()
-    markdown_converter = FileMarkdownConverter()
-    app = EmailApplication(email_sender, markdown_converter)
 
-    # Example usage
-    app.send_markdown_email("mailtrap@jlechner.com", "jll38@njit.edu", "subject", "emails/markdown0.md")
-
-    fake = Faker()
-    app.send_markdown_email(fake.email(), fake.email(), fake.sentence(), "emails/markdown1.md")
-
-if __name__ == "__main__":
-    main()

@@ -1,2 +1,4 @@
-# environemntal variables
-*.env
+*.sw*
+.coverage
+.pytest_cache
+*__pycache__
