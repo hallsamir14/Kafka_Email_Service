@@ -1,11 +1,11 @@
 import pytest
 import os
 from unittest.mock import patch, MagicMock
-from email_JL.emailer import FileMarkdownConverter, MailtrapEmailSender, EmailApplication
+from app.email_JL.emailer import FileMarkdownConverter, MailtrapEmailSender, EmailApplication
 from unittest.mock import ANY
 
 #Mocking the SMTP server for MailtrapEmailSender
-@patch("email_JL.emailer.smtplib.SMTP")
+@patch("app.email_JL.emailer.smtplib.SMTP")
 def test_mailtrap_email_sender(mock_smtp):
     sender = MailtrapEmailSender()
     mock_server = MagicMock()
@@ -20,8 +20,8 @@ def test_mailtrap_email_sender(mock_smtp):
 
 
 # Integration test for EmailApplication
-@patch("email_JL.emailer.FileMarkdownConverter.convert_to_html", return_value="<p>Converted HTML</p>")
-@patch("email_JL.emailer.MailtrapEmailSender.send_email")
+@patch("app.email_JL.emailer.FileMarkdownConverter.convert_to_html", return_value="<p>Converted HTML</p>")
+@patch("app.email_JL.emailer.MailtrapEmailSender.send_email")
 def test_email_application(mock_send_email, mock_convert_to_html):
     app = EmailApplication(MailtrapEmailSender(), FileMarkdownConverter())
     app.send_markdown_email("from@example.com", "to@example.com", "Subject", "markdowns/markdown2.md")

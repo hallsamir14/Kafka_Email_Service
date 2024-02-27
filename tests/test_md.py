@@ -1,7 +1,7 @@
 # tests.py
 import pytest
 from unittest.mock import patch, MagicMock
-from email_JL.emailer import FileMarkdownConverter, MailtrapEmailSender, EmailApplication
+from app.email_JL.emailer import FileMarkdownConverter, MailtrapEmailSender, EmailApplication
 
 # Test for markdown to HTML conversion
 def test_convert_to_html():
