@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import threading
 
 
 class Command(ABC):
@@ -15,6 +16,6 @@ class CommandHandler:
 
     def execute_command(self, command_name: str):
         try:
-            self.commands[command_name].execute()
+            thread = threading.Thread(target = self.commands[command_name].execute())
         except KeyError:
             print(f"No such command: {command_name}")
