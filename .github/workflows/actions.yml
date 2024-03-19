@@ -14,28 +14,28 @@ jobs:
     create-env-file:
       runs-on: ubuntu-latest
       steps:
-        - name: Checkout
-          uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
-        - name: Create .env file
-          env:
-            FAKE_SMTP_PORT : ${{ secrets.FAKE_SMTP_PORT }}
-            FAKE_SMTP_LOGIN_USER : ${{ secrets.FAKE_SMTP_LOGIN_USER }}
-            FAKE_SMTP_LOGIN_PASS : ${{ secrets.FAKE_SMTP_LOGIN_PASS }}
-            SMTP_PORT : ${{ secrets.SMTP_PORT }}
-            SERVER_PASS : ${{ secrets.SERVER_PASS }} 
-          run: |
-            echo "FAKE_SMTP_PORT=$FAKE_SMTP_PORT" >> .env
-            echo "FAKE_SMTP_LOGIN_USER=$FAKE_SMTP_LOGIN_USER" >> .env
-            echo "FAKE_SMTP_LOGIN_PASS=$FAKE_SMTP_LOGIN_PASS" >> .env
-            echo "SMTP_PORT=$SMTP_PORT" >> .env
-            echo "SERVER_PASS=$SERVER_PASS" >> .env
+      - name: Create .env file
+        env:
+          FAKE_SMTP_PORT : ${{ secrets.FAKE_SMTP_PORT }}
+          FAKE_SMTP_LOGIN_USER : ${{ secrets.FAKE_SMTP_LOGIN_USER }}
+          FAKE_SMTP_LOGIN_PASS : ${{ secrets.FAKE_SMTP_LOGIN_PASS }}
+          SMTP_PORT : ${{ secrets.SMTP_PORT }}
+          SERVER_PASS : ${{ secrets.SERVER_PASS }} 
+        run: |
+          echo "FAKE_SMTP_PORT=$FAKE_SMTP_PORT" >> .env
+          echo "FAKE_SMTP_LOGIN_USER=$FAKE_SMTP_LOGIN_USER" >> .env
+          echo "FAKE_SMTP_LOGIN_PASS=$FAKE_SMTP_LOGIN_PASS" >> .env
+          echo "SMTP_PORT=$SMTP_PORT" >> .env
+          echo "SERVER_PASS=$SERVER_PASS" >> .env
 
-        - name: Upload .env as an artifact
-          uses: actions/upload-artifact@v3
-          with:
-            name: local-env-file
-            path: app/email_JL/.env
+      - name: Upload .env as an artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: local-env-file
+          path: app/email_JL/.env
   job2:
     build:
 
