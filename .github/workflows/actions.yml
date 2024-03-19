@@ -1,20 +1,19 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
-name: Email application
+name: Email Application
 
-on:
+on: 
   workflow_dispatch:  # Trigger manually for security 
 
-
 permissions:
-  contents: read
+  contents: read  # Assuming this is needed at the workflow level
+
 jobs:
-  job1:
-    create-env-file:
-      runs-on: ubuntu-latest
-      steps:
-      - name: Checkout
+  create-env-file:  
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Create .env file
@@ -31,29 +30,34 @@ jobs:
           echo "SMTP_PORT=$SMTP_PORT" >> .env
           echo "SERVER_PASS=$SERVER_PASS" >> .env
 
-      - name: Upload .env as an artifact
+      - name: Upload .env artifact
         uses: actions/upload-artifact@v3
         with:
           name: local-env-file
           path: app/email_JL/.env
-  job2:
-    build:
 
-      runs-on: ubuntu-latest
-      needs:  job1
+  build:
+    runs-on: ubuntu-latest
+    needs: create-env-file  
+    steps:
+      - name: Download .env artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: local-env-file
 
-      steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code (if needed)
+        uses: actions/checkout@v3  # Add this if you'll modify code in 'build'
+
       - name: Set up Python 3.10
         uses: actions/setup-python@v3
         with:
           python-version: "3.10"
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install flake8 pytest
-          
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-      - name: Test with pytest --pylint
-        run: |
-          pytest
+
+      - name: Test with pytest
+        run: pytest  # Removed '--pylint' assuming you'll handle linting separately
