@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 import threading
 
 
+
 class Command(ABC):
     @abstractmethod
     def execute(self):
