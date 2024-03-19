@@ -1,0 +1,63 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: Email Application
+
+on: 
+  workflow_dispatch:  # Trigger manually for security 
+
+permissions:
+  contents: read  # Assuming this is needed at the workflow level
+
+jobs:
+  create-env-file:  
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Create .env file
+        env:
+          FAKE_SMTP_PORT : ${{ secrets.FAKE_SMTP_PORT }}
+          FAKE_SMTP_LOGIN_USER : ${{ secrets.FAKE_SMTP_LOGIN_USER }}
+          FAKE_SMTP_LOGIN_PASS : ${{ secrets.FAKE_SMTP_LOGIN_PASS }}
+          SMTP_PORT : ${{ secrets.SMTP_PORT }}
+          SERVER_PASS : ${{ secrets.SERVER_PASS }} 
+        run: |
+          echo "FAKE_SMTP_PORT=$FAKE_SMTP_PORT" >> .env
+          echo "FAKE_SMTP_LOGIN_USER=$FAKE_SMTP_LOGIN_USER" >> .env
+          echo "FAKE_SMTP_LOGIN_PASS=$FAKE_SMTP_LOGIN_PASS" >> .env
+          echo "SMTP_PORT=$SMTP_PORT" >> .env
+          echo "SERVER_PASS=$SERVER_PASS" >> .env
+
+      - name: Upload .env artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: local-env-file
+          path: app/email_JL/.env
+
+  build:
+    runs-on: ubuntu-latest
+    needs: create-env-file  
+    steps:
+      - name: Download .env artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: local-env-file
+
+      - name: Checkout code (if needed)
+        uses: actions/checkout@v3  # Add this if you'll modify code in 'build'
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pytest
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Test with pytest
+        run: pytest  # Removed '--pylint' assuming you'll handle linting separately

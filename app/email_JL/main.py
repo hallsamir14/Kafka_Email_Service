@@ -1,4 +1,4 @@
-from emailer import MailtrapEmailSender, FileMarkdownConverter, EmailApplication   
+from emailer import MailtrapEmailSender, FileMarkdownConverter, EmailApplication
 from faker import Faker
 
 def main():
@@ -6,6 +6,7 @@ def main():
     markdown_converter = FileMarkdownConverter()
     app = EmailApplication(email_sender, markdown_converter)
 
+    
     # Example usage
     app.send_markdown_email("mailtrap@jlechner.com", "jll38@njit.edu", "subject", "markdowns/markdown0.md")
 
