@@ -4,13 +4,17 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import logging
 import sys
-from dotenv import load_dotenv
 import os
 
-load_dotenv()
-sys.path.append(os.getenv('PROJECT_PARENT_DIR',''))
+#dyanmically determine the root path of the project
+parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(parent_dir)
+
+#import SMTP_connection object
 from app.utils.SMTP_connection import smtp_Settings
-from app.utils.template_manager import TemplateManager
+
+
+#emailer object will be used as the engine to send emails
 class emailer():
 
     @staticmethod
@@ -32,11 +36,3 @@ class emailer():
             logging.error(f"Failed to send email: {str(e)}")
             raise
 
-'''
-In this code, we first create an instance of the `emailer` class (`emailer_instance`), 
-and then call the `send_email` method on this instance.
-'''
-TemplateManager = TemplateManager()
-
-content:str = TemplateManager.render_template('email_verification', name='John Doe', verification_url='http://example.com/verify/1234')
-emailer.send_email('content',content,'recipient')
