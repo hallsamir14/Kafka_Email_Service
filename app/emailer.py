@@ -4,8 +4,11 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import logging
 import sys
+from dotenv import load_dotenv
+import os
 
-sys.path.append("/home/hallwork/webApps/Email_Service")
+load_dotenv()
+sys.path.append(os.getenv('PROJECT_PARENT_DIR',''))
 from app.utils.SMTP_connection import smtp_Settings
 from app.utils.template_manager import TemplateManager
 class emailer():
