@@ -9,4 +9,3 @@ class smtp_Settings():
         self.port=int(os.getenv('SMTP_PORT', 2525))
         self.username=os.getenv('SMTP_USERNAME', '')
         self.password=os.getenv('SMTP_PASSWORD', '')
-
