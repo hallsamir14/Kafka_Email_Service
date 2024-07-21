@@ -14,7 +14,11 @@ This project provides an email service designed to act as a plugin module for a 
 1. **Clone the Repository**
    ```bash
    git clone https://github.com/your-repository/email-service.git
-   cd email-service
+   cd email-service 
+
+## Notification System
+
+## Email Infrastructure
 
 
 
