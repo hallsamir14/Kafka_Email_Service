@@ -17,8 +17,25 @@ This project provides an email service designed to act as a plugin module for a 
    cd email-service 
 
 ## Notification System
+A notification system sends a message to a group of receivers using a combination of hardware and software. 
 
 ## Email Infrastructure
+- **Email Template Management**
+Email User Agents (MUAs): E-mail programs such as Gmail, Outlook, and Thunderbird are included in this. With dynamic placeholders, users can design, modify, and maintain email templates that are tailored to their target audience and appear professional.
+  
+- **Pre-Production Testing**
+Mail Submission Agent (MSA): Serves as a liaison between the Mail Transfer Agent (MTA) and the MUA to guarantee that emails are proofread in a sandbox before being sent. 
+Mail Transfer Agent (MTA): Manages the actual email sending process because the system is set up to mimic email delivery without really sending emails, guaranteeing that any potential problems are found and fixed. 
+  
+- **Integration Ready**
+Makes certain that emails are sent and formatted correctly as part of the overall notification workflow.
+
+- **Docker Support**
+Dockerization: Because the email service is dockerized, it can be quickly and simply implemented in any kind of environment. Docker makes ensuring that all configurations and dependencies are included, giving the email service a consistent environment.
+  
+- **Customizable Settings**
+SMTP Server Configuration: A user-friendly interface allows users to customize the SMTP parameters. Configuring the SMTP server, authentication methods, and further email delivery settings are all included in this.humiliated in any setting. Docker provides a consistent environment for the email service by making sure that all configurations and dependencies are included.
+Authentication Protocols: The assurance of verified emails and increased likelihood of reaching the recipient's inbox is provided via support for SPF, DKIM, and DmARC. These security measures shield the email's content and aid in sender identification verification. 
 
 
 
