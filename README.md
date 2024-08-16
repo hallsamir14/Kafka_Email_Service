@@ -7,7 +7,6 @@ This project provides an email service designed to act as a plugin module for a 
 - **Email Template Management**: Create, edit, and manage email templates with dynamic placeholders.
 - **Pre-Production Testing**: Test email sending capabilities in a sandbox environment to ensure reliability and correctness.
 - **Integration Ready**: Designed as a plug-and-play module for existing notification systems.
-- **Docker Support**: Dockerized application for easy deployment and scalability.
 - **Customizable Settings**: Configure SMTP settings, email content, and more through a user-friendly interface.
 
 ## Installation & Setup
@@ -29,9 +28,6 @@ Mail Transfer Agent (MTA): Manages the actual email sending process because the 
   
 - **Integration Ready**
 Makes certain that emails are sent and formatted correctly as part of the overall notification workflow.
-
-- **Docker Support**
-Dockerization: Because the email service is dockerized, it can be quickly and simply implemented in any kind of environment. Docker makes ensuring that all configurations and dependencies are included, giving the email service a consistent environment.
   
 - **Customizable Settings**
 SMTP Server Configuration: A user-friendly interface allows users to customize the SMTP parameters. Configuring the SMTP server, authentication methods, and further email delivery settings are all included in this.humiliated in any setting. Docker provides a consistent environment for the email service by making sure that all configurations and dependencies are included.
