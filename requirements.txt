@@ -1,2 +1,5 @@
 markdown2==2.4.13
 python-dotenv==1.0.1
+confluent_kafka==2.3.0
+pydantic == 2.7.0
+pydantic-settings = 2.2.1
