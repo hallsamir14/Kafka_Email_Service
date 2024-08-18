@@ -1,0 +1,29 @@
+{
+    "version": 1,
+    "formatters": {
+        "default": {
+            "format": "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+        }
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "default",
+            "level": "INFO"
+        },
+        "file": {
+            "class": "logging.FileHandler",
+            "formatter": "default",
+            "level": "DEBUG",
+            "filename": "kafka_consumer.log",
+            "mode": "a"
+        }
+    },
+    "loggers": {
+        "": {
+            "handlers": ["console", "file"],
+            "level": "DEBUG",
+            "propagate": true
+        }
+    }
+}
