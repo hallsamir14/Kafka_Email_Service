@@ -9,12 +9,6 @@ This project provides an email service designed to act as a plugin module for a 
 - **Integration Ready**: Designed as a plug-and-play module for existing notification systems.
 - **Customizable Settings**: Configure SMTP settings, email content, and more through a user-friendly interface.
 
-## Installation & Setup
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/your-repository/email-service.git
-   cd email-service 
-
 ## Notification System
 A notification system sends a message to a group of receivers using a combination of hardware and software. 
 
@@ -33,5 +27,17 @@ Makes certain that emails are sent and formatted correctly as part of the overal
 SMTP Server Configuration: A user-friendly interface allows users to customize the SMTP parameters. Configuring the SMTP server, authentication methods, and further email delivery settings are all included in this.humiliated in any setting. Docker provides a consistent environment for the email service by making sure that all configurations and dependencies are included.
 Authentication Protocols: The assurance of verified emails and increased likelihood of reaching the recipient's inbox is provided via support for SPF, DKIM, and DmARC. These security measures shield the email's content and aid in sender identification verification. 
 
+## Pre-Production Email Tessting - Instructions & Configuration
 
+## Composite Objects Used for the App
+
+## Mailtrap
+
+## Docker
+
+## Installation & Setup
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/your-repository/email-service.git
+   cd email-service 
 
