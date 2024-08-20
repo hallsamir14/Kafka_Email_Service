@@ -27,11 +27,13 @@ Makes certain that emails are sent and formatted correctly as part of the overal
 SMTP Server Configuration: A user-friendly interface allows users to customize the SMTP parameters. Configuring the SMTP server, authentication methods, and further email delivery settings are all included in this.humiliated in any setting. Docker provides a consistent environment for the email service by making sure that all configurations and dependencies are included.
 Authentication Protocols: The assurance of verified emails and increased likelihood of reaching the recipient's inbox is provided via support for SPF, DKIM, and DmARC. These security measures shield the email's content and aid in sender identification verification. 
 
-## Pre-Production Email Tessting - Instructions & Configuration
-
 ## Composite Objects Used for the App
+**settings**: Defines kafka broker's address and specifies the topic to subscribe to
+**smtp_Settings**: Connects to mail trap so that the app is connected to the server and port, thus able to send messages to the environment
+**emailer**: Puts the files in email_templates together (header, body, footer) and sends it to mail trap to test that the formatting comes out correctly
 
 ## Mailtrap
+Mail Trap is an email delivery platform that allows customers to manager the mail infrastructure in on place
 
 ## Docker
 
@@ -39,5 +41,8 @@ Authentication Protocols: The assurance of verified emails and increased likelih
 1. **Clone the Repository**
    ```bash
    git clone https://github.com/your-repository/email-service.git
-   cd email-service 
+   cd email-service
+2. **Create mailtrap account**
+3. **Docker compose**
+4. **Run python file**
 
