@@ -28,7 +28,7 @@ SMTP Server Configuration: A user-friendly interface allows users to customize t
 Authentication Protocols: The assurance of verified emails and increased likelihood of reaching the recipient's inbox is provided via support for SPF, DKIM, and DmARC. These security measures shield the email's content and aid in sender identification verification. 
 
 ## Composite Objects Used for the App
-- **settings**: Defines kafka broker's address and specifies the topic to subscribe to.
+- **settings**: Sets up api to read kafka messages. 
 - **smtp_Settings**: Connects to mail trap so that the app is connected to the server and port, thus able to send messages to the environment.
 - **emailer**: Puts the files in email_templates together (header, body, footer) and sends it to mail trap to test that the formatting comes out correctly.
 
