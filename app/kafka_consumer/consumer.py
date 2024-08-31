@@ -2,24 +2,10 @@ import json
 import logging
 import logging.config
 from confluent_kafka import Consumer, KafkaError
-from pydantic_settings import BaseSettings
 import signal
 import sys
-
-
-
-class Settings(BaseSettings):
-# Load settings from an external `.env` file for better maintainability
-    kafka_bootstrap_servers: str = 'localhost:9092' #kafka:9092 when dockerized
-    commands_topic: str = 'kafka_commands'
-    consumer_group: str = 'my_consumer_group'
-    auto_offset_reset: str = 'earliest'  # Can be set to 'latest' or 'earliest'
-
-    class Config:
-        env_file = ".env"
-        env_file_encoding = 'utf-8'
-
-settings = Settings()
+from dotenv import load_dotenv
+import os
 
 # Load logging configuration from an external JSON file for better maintainability
 with open('logging_config.json', 'r') as config_file:
@@ -27,6 +13,28 @@ with open('logging_config.json', 'r') as config_file:
     logging.config.dictConfig(logging_config)
 
 logger = logging.getLogger(__name__)
+
+# Load environment variables from a .env file
+load_dotenv()
+
+class Settings:
+    def __init__(self):
+        # Load settings from environment variables or use default values
+        self.kafka_bootstrap_servers = os.getenv('KAFKA_BOOTSTRAP_SERVERS', 'localhost:9092')  # kafka:9092 when dockerized
+        self.commands_topic = os.getenv('COMMANDS_TOPIC', 'kafka_commands')
+        self.consumer_group = os.getenv('CONSUMER_GROUP', 'my_consumer_group')
+        self.auto_offset_reset = os.getenv('AUTO_OFFSET_RESET', 'earliest')  # Can be set to 'latest' or 'earliest'
+    
+    def check_env_variable(self, var_name, default_value) -> None:
+        value = os.getenv(var_name, default_value)
+        if value == default_value:
+            logger.info(f"Environment variable {var_name} not set. Using default value: {default_value}")
+        
+settings = Settings()
+settings.check_env_variable('KAFKA_BOOTSTRAP_SERVERS', 'localhost:9092')
+settings.check_env_variable('COMMANDS_TOPIC', 'kafka_commands')
+settings.check_env_variable('CONSUMER_GROUP', 'my_consumer_group')
+settings.check_env_variable('AUTO_OFFSET_RESET', 'earliest')
 
 # Initialize the Kafka Consumer with settings from the `.env` file
 consumer = Consumer({
