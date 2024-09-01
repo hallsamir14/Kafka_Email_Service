@@ -1,7 +1,7 @@
 # Pre-Production Email Testing - Instructions & Configuration
 
 ## Overview
-This project provides an email service designed to act as an email plugin module. Developed in Python, this service is tailored for pre-production testing, ensuring that email notifications are correctly formatted, sent, and received before deployment. The service is designed to be implemented within a microserive based application architecture, making it easily integrable and scalable within any application ecosystem requiring email notification capabilities.
+This project provides an email service designed to act as an email plugin module. Developed in Python, this service is tailored for pre-production testing, ensuring that email notifications are correctly formatted, sent, and received before deployment. The service is designed to be implemented within a microservice based application architecture, making it easily integrable and scalable within any application ecosystem requiring email notification capabilities.
 
 ## Email Module Features
 - **Email Template Engine**: Create, edit, and manage email templates with dynamic placeholders.
