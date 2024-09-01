@@ -1,48 +1,62 @@
 # Pre-Production Email Testing - Instructions & Configuration
 
 ## Overview
-This project provides an email service designed to act as a plugin module for a broader notification system. Developed in Python, this service is tailored for pre-production testing, ensuring that email notifications are correctly formatted, sent, and received before deployment. The service is dockerized, making it easily integrable and scalable within any application ecosystem requiring email notification capabilities.
+This project provides an email service designed to act as an email plugin module. Developed in Python, this service is tailored for pre-production testing, ensuring that email notifications are correctly formatted, sent, and received before deployment. The service is designed to be implemented within a microserive based application architecture, making it easily integrable and scalable within any application ecosystem requiring email notification capabilities.
 
-## Features
-- **Email Template Management**: Create, edit, and manage email templates with dynamic placeholders.
+## Email Module Features
+- **Email Template Engine**: Create, edit, and manage email templates with dynamic placeholders.
 - **Pre-Production Testing**: Test email sending capabilities in a sandbox environment to ensure reliability and correctness.
-- **Integration Ready**: Designed as a plug-and-play module for existing notification systems.
+- **Integration Ready**: Designed as a plug-and-play module for existing notification systems using Kakfa based system messaging.
 - **Customizable Settings**: Configure SMTP settings, email content, and more through a user-friendly interface.
 
-## Notification System
-A notification system sends a message to a group of receivers using a combination of hardware and software. 
-
 ## Email Infrastructure
-- **Email Template Management**
-Email User Agents (MUAs): E-mail programs such as Gmail, Outlook, and Thunderbird are included in this. With dynamic placeholders, users can design, modify, and maintain email templates that are tailored to their target audience and appear professional.
-  
-- **Pre-Production Testing**
-Mail Submission Agent (MSA): Serves as a liaison between the Mail Transfer Agent (MTA) and the MUA to guarantee that emails are proofread in a sandbox before being sent. 
-Mail Transfer Agent (MTA): Manages the actual email sending process because the system is set up to mimic email delivery without really sending emails, guaranteeing that any potential problems are found and fixed. 
-  
-- **Integration Ready**
-Makes certain that emails are sent and formatted correctly as part of the overall notification workflow.
-  
-- **Customizable Settings**
-SMTP Server Configuration: A user-friendly interface allows users to customize the SMTP parameters. Configuring the SMTP server, authentication methods, and further email delivery settings are all included in this.humiliated in any setting. Docker provides a consistent environment for the email service by making sure that all configurations and dependencies are included.
-Authentication Protocols: The assurance of verified emails and increased likelihood of reaching the recipient's inbox is provided via support for SPF, DKIM, and DmARC. These security measures shield the email's content and aid in sender identification verification. 
+The email infrastructure is designed to ensure reliable and correct email delivery in a pre-production environment. It includes the following components:
 
-## Composite Objects Used for the App
-- **settings**: Sets up api to read kafka messages. 
-- **smtp_Settings**: Connects to mail trap so that the app is connected to the server and port, thus able to send messages to the environment.
-- **emailer**: Puts the files in email_templates together (header, body, footer) and sends it to mail trap to test that the formatting comes out correctly.
+- **Mail Submission Agent (MSA)**: Acts as a liaison between the Mail Transfer Agent (MTA) and the Mail User Agent (MUA) to guarantee that emails are proofread in a sandbox before being sent.
+- **Mail Transfer Agent (MTA)**: Manages the actual email sending process. The system is set up to mimic email delivery without really sending emails, ensuring that any potential problems are found and fixed.
 
-## Mailtrap
-Mail Trap is an email delivery platform that allows customers to manager the mail infrastructure in on place.
+## Event-Driven Architecture with Kafka
+This email service leverages a Kafka-based event-driven architecture to handle email notifications efficiently and reliably. Kafka is used as the backbone for event streaming, ensuring that email events are processed asynchronously and at scale.
 
-## Docker
+### Key Components:
+- **Kafka Producer**: The application emits email-related events (e.g., user sign-up, purchase completed) to Kafka topics.
+- **Kafka Broker**: Kafka brokers manage the storage and retrieval of event data, ensuring high throughput and fault tolerance.
+- **Kafka Consumer**: The email service acts as a Kafka consumer, listening to relevant topics for email events. When an event is received, the service processes the event and sends the corresponding email.
 
-## Installation & Setup
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/your-repository/email-service.git
-   cd email-service
-2. **Create mailtrap account**
-3. **Docker compose**
-4. **Run python file**
+### Workflow:
+1. **Event Generation**: An event is generated when a specific action occurs in the application (e.g., a user signs up).
+2. **Event Emission**: User management system for application emits the event to a Kafka topic.
+3. **Event Processing**: The email service, subscribed to corresponding Kafka topic, receives the event.
+4. **Email Sending**: The email service formats the email using user defined templates and sends it using the configured MTA.
+5. **Delivery Confirmation**: The MTA delivers the email to the recipient's mail server, and the email service logs the delivery status.
 
+This architecture ensures that the email service is decoupled from the main application logic, allowing for independent scaling and maintenance. It also provides reliability through Kafka's fault-tolerant design, ensuring that no email events are lost.
+
+
+## Local Configuration & Setup
+1. **Clone the Repository and Navigate to Root of Application**
+   ```
+   git clone git@github.com:hallsamir14/Kafka_Email_Service.git
+   ```
+   ```
+   cd Kafka_Email_Service/
+   ```
+2. **Enable Development Scripts to be Executable**
+   ```
+   chmod +x devops_scripts/*.sh
+   ```
+3. **Start Application Dependencies Using Docker Compose**
+   - Ensure Docker and Docker Compose are installed on your local machine.
+   - Docker Compose facilitates dependencies for application so simulate fundmaental mechansims. These depedences come in the form of services and include:MySQL Database (Mock Database), Kafka Server, Kafka Producer (Mock Producer Interface) Zookeeper (Depdendecny for Kafka), 
+     ```
+     docker-compose up --build -d
+     ```
+     ### or
+     ```
+     devops_scripts/build_dockerCompose.sh
+     ```
+4. **Run App**
+   - Execute the main Python file to start the email service:
+     ```
+     python main.py
+     ```

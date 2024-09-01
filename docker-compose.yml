@@ -45,3 +45,17 @@ services:
       timeout: 10s
       retries: 5
 
+  mysql:
+    build:
+      context: ./mockDB
+      dockerfile: Dockerfile
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: ecommerce
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
