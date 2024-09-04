@@ -10,3 +10,12 @@ project_root = os.path.dirname(current_dir)
 
 # Add the project root to the Python path
 sys.path.append(project_root)
+
+from app.emailer import emailer
+
+def test_email():
+    result = "hi"
+
+    assert result == "smtp succesful send confirmation?"
+
+    
