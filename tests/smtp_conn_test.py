@@ -33,3 +33,11 @@ class TestSMTP():
 
         assert connection == 250
         server.quit()
+
+    def test_login(self, settings):
+        server = smtplib.SMTP(settings.server, settings.port)
+        server.starttls()
+
+        server.login(settings.username, settings.password)
+        
+        server.quit()
