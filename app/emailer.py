@@ -6,26 +6,26 @@ import logging
 import sys
 import os
 
-#dyanmically determine the root path of the project
+# dyanmically determine the root path of the project
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(parent_dir)
 
-#import SMTP_connection object
+# import SMTP_connection object
 from app.utils.SMTP_connection import smtp_Settings
 
 
-#emailer object will be used as the engine to send emails
-class emailer():
+# emailer object will be used as the engine to send emails
+class emailer:
 
     @staticmethod
     def send_email(subject: str, html_content: str, recipient: str):
         settings = smtp_Settings()
         try:
-            message = MIMEMultipart('alternative')
-            message['Subject'] = subject
-            message['From'] = settings.username
-            message['To'] = recipient
-            message.attach(MIMEText(html_content, 'html'))
+            message = MIMEMultipart("alternative")
+            message["Subject"] = subject
+            message["From"] = settings.username
+            message["To"] = recipient
+            message.attach(MIMEText(html_content, "html"))
 
             with smtplib.SMTP(settings.server, settings.port) as server:
                 server.starttls()  # Use TLS
@@ -35,4 +35,3 @@ class emailer():
         except Exception as e:
             logging.error(f"Failed to send email: {str(e)}")
             raise
-
