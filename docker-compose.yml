@@ -44,7 +44,7 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
-
+#TODO: fix issue where database is not being created within mockDB conatiner
   mysql:
     build:
       context: ./mockDB
@@ -52,7 +52,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./mockdDB/sample_ecommerce.sql:/docker-entrypoint-initdb.d/sample_ecommerce.sql
+      - ./sample_ecommerce.sql:/docker-entrypoint-initdb.d/sample_ecommerce.sql
     command: bash -c "chmod 755 /docker-entrypoint-initdb.d/sample_ecommerce.sql && /docker-entrypoint.sh mysql"
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]

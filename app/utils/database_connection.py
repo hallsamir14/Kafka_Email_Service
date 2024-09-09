@@ -35,7 +35,7 @@ def main():
         #close_connection(connection)
     else:
         print("Failed to connect to database")
-    
+    #TODO:try and exception logic here
     #exmample query 
     curser = connection.cursor()
     curser.execute("SELECT * FROM users")
