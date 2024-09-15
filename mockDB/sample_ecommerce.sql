@@ -1,6 +1,3 @@
--- Create the database
-CREATE DATABASE ecommerce;
-
 -- Switch to the new database
 USE ecommerce;
 

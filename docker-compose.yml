@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 networks:
   kafka_network:
     driver: bridge
@@ -14,7 +14,19 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
     healthcheck:
-      test: ["CMD", "echo", "ruok", "|", "nc", "localhost", "2181", "|", "grep", "imok"]
+      test:
+        [
+          "CMD",
+          "echo",
+          "ruok",
+          "|",
+          "nc",
+          "localhost",
+          "2181",
+          "|",
+          "grep",
+          "imok",
+        ]
       interval: 10s
       timeout: 10s
       retries: 5
@@ -44,16 +56,13 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
-#TODO: fix issue where database is not being created within mockDB conatiner
+  #TODO: fix issue where database is not being created within mockDB conatiner
   mysql:
     build:
       context: ./mockDB
       dockerfile: Dockerfile
     ports:
       - "3306:3306"
-    volumes:
-      - ./sample_ecommerce.sql:/docker-entrypoint-initdb.d/sample_ecommerce.sql
-    command: bash -c "chmod 755 /docker-entrypoint-initdb.d/sample_ecommerce.sql && /docker-entrypoint.sh mysql"
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
