@@ -17,3 +17,4 @@ consumer = Consumer(
     }
 )
 consumer.subscribe([settings.commands_topic])
+
