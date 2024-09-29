@@ -2,10 +2,10 @@
 FROM python:3.12.2-bullseye
 
 # Set the working directory in the container
-WORKDIR /kafka_producer
+WORKDIR /mock_kafkaProducer
 
-# Copy the current directory contents into the container at /app
-COPY kafka_producer/ .
+# Copy the contents of local 'mock_kafkaProducer/' directory into the current directory of container
+COPY . .
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
