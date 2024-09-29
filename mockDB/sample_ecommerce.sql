@@ -40,8 +40,8 @@ INSERT INTO users (username, email, password) VALUES
 INSERT INTO products (name, description, price) VALUES
 ('Laptop', 'A high-performance laptop', 999.99),
 ('Smartphone', 'A latest model smartphone', 699.99),
-('Headphones', 'Noise-cancelling headphones', 199.99);
-
+('Headphones', 'Noise-cancelling headphones', 199.99),
+('Microphone', 'Condenser Microphone', 149.99);
 -- Insert mock data into the orders table
 INSERT INTO orders (user_id, product_id, quantity) VALUES
 (1, 1, 1),  -- John Doe orders 1 Laptop

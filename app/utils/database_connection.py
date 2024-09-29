@@ -38,7 +38,7 @@ def main():
     #TODO:try and exception logic here
     #exmample query 
     curser = connection.cursor()
-    curser.execute("SELECT * FROM users")
+    curser.execute("SELECT * FROM products")
     for row in curser.fetchall():
         print(row)
     close_connection(connection)
