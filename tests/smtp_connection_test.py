@@ -6,26 +6,26 @@ from app.utils.SMTP_connection import smtp_Settings
 class TestSMTP():
     @pytest.fixture
     def settings(self):
-        settings = smtp_Settings()
-        return settings
+        settings = smtp_Settings()      #get smtp settings
+        return settings                 #pass function as a argument in other test to use
     
     def test_server_name(self, settings): 
-        result = bool(settings.server and settings.server.strip())
+        result = bool(settings.server and settings.server.strip())      #ensure server name is not empty
         assert result == True
     
-    def test_server_port(self, settings):
+    def test_server_port(self, settings):                                  #ensure server port is of type int
         result = isinstance(settings.port, int)
         assert result == True
 
     def test_server_username(self, settings):
-        result = bool(settings.username and settings.username.strip())
+        result = bool(settings.username and settings.username.strip())      #ensure username is not empty
         assert result == True
 
     def test_server_password(self, settings):
-        result = bool(settings.password and settings.password.strip())
+        result = bool(settings.password and settings.password.strip())      #ensure password is not empty
         assert result == True
 
-    def test_smtp_connection(self, settings):
+    def test_smtp_connection(self, settings):                               #ensure connection to server is valid
         server = smtplib.SMTP(settings.server, settings.port)
         server.starttls()
 
@@ -34,7 +34,7 @@ class TestSMTP():
         assert connection == 250
         server.quit()
 
-    def test_login(self, settings):
+    def test_login(self, settings):                                         #ensure valid login credentials
         server = smtplib.SMTP(settings.server, settings.port)
         server.starttls()
 

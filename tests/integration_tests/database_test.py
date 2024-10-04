@@ -8,14 +8,19 @@ import docker
 @pytest.fixture(scope="module", autouse=True)
 def start_docker_compose(pytestconfig):
 
-    docker_compose_file = pytestconfig.getoption("docker_compose_ecommerce")
+    docker_compose_file = pytestconfig.getoption("docker_compose_ecommerce")    #get docker compose file
     client = docker.from_env()
 
     if docker_compose_file:
+        containers = client.containers.list()   #teardown all containers before setting up containers
+        for container in containers:
+            container.stop()
+            container.remove()
+
         print(f"Starting Docker Compose with {docker_compose_file}")
         subprocess.run(["docker","compose", "-f", docker_compose_file, "up", "-d"], check=True)
 
-        yield  #yield to test
+        yield  #yield to test, pause code and run test before finishing
     
         containers = client.containers.list()   #teardown all containers
         for container in containers:
@@ -45,19 +50,19 @@ def database_connection():
 
 @pytest.fixture(scope="function")
 def db_cursor(database_connection):
-    cursor = database_connection.cursor(buffered=True)
-    yield cursor
+    cursor = database_connection.cursor(buffered=True)      #get curser
+    yield cursor                                            #yield cursor to other test
     cursor.close()
 
 def test_database_table_exists(db_cursor):
     # db_cursor is injected here too
-    db_cursor.execute("SHOW TABLES LIKE 'users'")
+    db_cursor.execute("SHOW TABLES LIKE 'users'")                   #ensure users table exist
     result = db_cursor.fetchone()
     assert result is not None, "Users table does not exist"
 
 def test_database_values_exist(db_cursor):
     # db_cursor is injected here too
-    db_cursor.execute("SELECT * FROM users")
+    db_cursor.execute("SELECT * FROM users")                    #ensure there are values in users table
     result = db_cursor.fetchone()
     assert result is not None, "No data in table"
 
