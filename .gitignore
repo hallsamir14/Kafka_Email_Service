@@ -7,6 +7,6 @@ logs/
 *.log
 lib/
 bin/
-lib64/
+lib64
 include/
 pyvenv.cfg

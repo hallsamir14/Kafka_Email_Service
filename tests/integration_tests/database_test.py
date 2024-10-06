@@ -18,6 +18,8 @@ def start_docker_compose(pytestconfig):
             container.remove()
 
         print(f"Starting Docker Compose with {docker_compose_file}")
+        #For linux  - - - "$docker compose"
+        #For Windows - - - "$docker-compose"
         subprocess.run(["docker","compose", "-f", docker_compose_file, "up", "-d"], check=True)
 
         yield  #yield to test, pause code and run test before finishing
