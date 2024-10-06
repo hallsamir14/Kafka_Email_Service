@@ -5,41 +5,48 @@ import mysql.connector
 from mysql.connector import Error
 import docker
 
+
 @pytest.fixture(scope="module", autouse=True)
 def start_docker_compose(pytestconfig):
 
-    docker_compose_file = pytestconfig.getoption("docker_compose_ecommerce")    #get docker compose file
+    docker_compose_file = pytestconfig.getoption(
+        "docker_compose_ecommerce"
+    )  # get docker compose file
     client = docker.from_env()
 
     if docker_compose_file:
-        containers = client.containers.list()   #teardown all containers before setting up containers
+        containers = (
+            client.containers.list()
+        )  # teardown all containers before setting up containers
         for container in containers:
             container.stop()
             container.remove()
 
         print(f"Starting Docker Compose with {docker_compose_file}")
-        #For linux  - - - "$docker compose"
-        #For Windows - - - "$docker-compose"
-        subprocess.run(["docker","compose", "-f", docker_compose_file, "up", "-d"], check=True)
+        # For linux  - - - "$docker compose"
+        # For Windows - - - "$docker-compose"
+        subprocess.run(
+            ["docker", "compose", "-f", docker_compose_file, "up", "-d"], check=True
+        )
 
-        yield  #yield to test, pause code and run test before finishing
-    
-        containers = client.containers.list()   #teardown all containers
+        yield  # yield to test, pause code and run test before finishing
+
+        containers = client.containers.list()  # teardown all containers
         for container in containers:
             container.stop()
             container.remove()
 
-    
+
 @pytest.fixture(scope="module")
 def database_connection():
     # Wait for MySQL to be ready (increase if needed)
     for i in range(15):  # Try for 10 seconds
         try:
-            connection = mysql.connector.connect(user='root', password='',
-                                          host='localhost',  
-                                          database='ecommerce')
-            
-            yield connection #let other functions use the connection before closing
+            connection = mysql.connector.connect(
+                user="root", password="", host="localhost", database="ecommerce"
+            )
+
+            yield connection  # let other functions use the connection before closing
 
             connection.close()
             print("Database is ready")
@@ -50,22 +57,23 @@ def database_connection():
     else:
         pytest.fail("Database didn't become ready in time")
 
+
 @pytest.fixture(scope="function")
 def db_cursor(database_connection):
-    cursor = database_connection.cursor(buffered=True)      #get curser
-    yield cursor                                            #yield cursor to other test
+    cursor = database_connection.cursor(buffered=True)  # get curser
+    yield cursor  # yield cursor to other test
     cursor.close()
+
 
 def test_database_table_exists(db_cursor):
     # db_cursor is injected here too
-    db_cursor.execute("SHOW TABLES LIKE 'users'")                   #ensure users table exist
+    db_cursor.execute("SHOW TABLES LIKE 'users'")  # ensure users table exist
     result = db_cursor.fetchone()
     assert result is not None, "Users table does not exist"
 
+
 def test_database_values_exist(db_cursor):
     # db_cursor is injected here too
-    db_cursor.execute("SELECT * FROM users")                    #ensure there are values in users table
+    db_cursor.execute("SELECT * FROM users")  # ensure there are values in users table
     result = db_cursor.fetchone()
     assert result is not None, "No data in table"
-
-
