@@ -1,40 +1,22 @@
-import os
-import logging
+import sys
+import json
+import signal
+from consumer_config import Config
 from confluent_kafka import Consumer, KafkaError
 
-# Set up logging configuration
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
+# Initialize the Config class to load environment variables and set up logging
+settings = Config()
+logger = settings.set_logger()
 
-class Settings:
-    def __init__(self):
-        self.kafka_bootstrap_servers = os.getenv('KAFKA_BOOTSTRAP_SERVERS', 'localhost:9092')
-        self.commands_topic = os.getenv('COMMANDS_TOPIC', 'kafka_commands')
-        self.consumer_group = os.getenv('CONSUMER_GROUP', 'my_consumer_group')
-        self.auto_offset_reset = os.getenv('AUTO_OFFSET_RESET', 'earliest')
+# Check if the required environment variables are set, otherwise log a warning
+settings.check_env_variable("KAFKA_BOOTSTRAP_SERVERS", "localhost:9092")
+settings.check_env_variable("COMMANDS_TOPIC", "kafka_commands")
+settings.check_env_variable("CONSUMER_GROUP", "my_consumer_group")
+settings.check_env_variable("AUTO_OFFSET_RESET", "earliest")
 
-    def check_env_variable(self, var_name, default):
-        value = os.getenv(var_name, default)
-        return value
-
-# Instantiate Settings
-settings = Settings()
-
-# Only call this function once
-def check_env_with_logging(var_name, default):
-    value = settings.check_env_variable(var_name, default)
-    if value == default:
-        logger.warning(f"Environment variable {var_name} is not set. Using default value: {default}")
-    else:
-        logger.info(f"Environment variable {var_name} is set: {value}")
-
-check_env_with_logging("KAFKA_BOOTSTRAP_SERVERS", "localhost:9092")
-check_env_with_logging("COMMANDS_TOPIC", "kafka_commands")
-check_env_with_logging("CONSUMER_GROUP", "my_consumer_group")
-check_env_with_logging("AUTO_OFFSET_RESET", "earliest")
-
-# Initialize the Kafka Consumer
+# Initialize the Kafka Consumer with settings from the `.env` file using Config instance
 try:
+
     consumer = Consumer(
         {
             "bootstrap.servers": settings.kafka_bootstrap_servers,
@@ -42,13 +24,56 @@ try:
             "auto.offset.reset": settings.auto_offset_reset,
         }
     )
-    logger.info("Kafka Consumer initialized successfully.")
-except KafkaError as e:
-    logger.error(f"Failed to initialize Kafka Consumer: {e}")
-
-# Subscribe to the Kafka topic
-try:
     consumer.subscribe([settings.commands_topic])
-    logger.info(f"Subscribed to Kafka topic: {settings.commands_topic}")
-except KafkaError as e:
-    logger.error(f"Failed to subscribe to Kafka topic: {e}")
+    logger.info("Kafka consumer initialized and subscribed to topic.")
+except Exception as e:
+    logger.error(f"Failed to initialize Kafka consumer: {e}")
+    sys.exit(1)
+
+
+def signal_handler(signal, frame):
+    """Graceful shutdown of the consumer on receiving SIGINT or SIGTERM."""
+    logger.info("Shutting down consumer...")
+    consumer.close()
+    sys.exit(0)
+
+
+# Register signal handlers for graceful termination
+signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
+
+
+def process_message(message):
+    """Log the processing of each message."""
+    logger.info(f"Processing message: {message}")
+
+
+def consume_messages():
+    """Continuously consume messages from Kafka and process them."""
+    try:
+        while True:
+            msg = consumer.poll(timeout=1.0)
+            if msg is None:
+                continue
+            if msg.error():
+                # Handle errors such as the end of a partition or other Kafka errors
+                if msg.error().code() == KafkaError._PARTITION_EOF:
+                    logger.info(
+                        f"End of partition reached {msg.topic()}:{msg.partition()}"
+                    )
+                else:
+                    logger.error(f"Error occurred: {msg.error().str()}")
+            else:
+                # Process the valid message
+                message = msg.value().decode("utf-8")
+                process_message(json.loads(message))
+    except Exception as e:
+        logger.error(f"An unexpected exception occurred: {e}")
+    finally:
+        # Ensure the consumer is properly closed during an unexpected shutdown
+        consumer.close()
+        logger.info("Consumer closed")
+
+
+if __name__ == "__main__":
+    consume_messages()

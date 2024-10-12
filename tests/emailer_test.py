@@ -3,7 +3,8 @@ import pytest
 from app.emailer import emailer
 from app.utils.template_manager import TemplateManager
 
-class TestEmail():
+
+class TestEmail:
     @pytest.fixture
     def manager(self):
         manager = TemplateManager()         #initialize template manager to use in email test
