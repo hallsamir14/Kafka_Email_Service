@@ -8,7 +8,7 @@ import docker
 @pytest.fixture(scope="module", autouse=True)
 def start_docker_compose(pytestconfig):
 
-    docker_compose_file = pytestconfig.getoption("docker_compose_ecommerce")    #get docker compose file
+    docker_compose_file = pytestconfig.getoption("docker_compose_ecommerce")    #get docker compose file, get option retrieves value for command line option
     client = docker.from_env()
 
     if docker_compose_file:
