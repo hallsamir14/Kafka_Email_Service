@@ -67,7 +67,7 @@ This architecture ensures that the email service is decoupled from the main appl
      python main.py
      ```
 
-### Testing the Application (For Developers):
+## Testing the Application (For Developers):
 
 - **Testing Infrastructure**: Test infrastucture is built using pytest. To run test, simply use the "pytest" command in the terminal. All test are in the "tests" folder.
 - **Integration Test**: Integration test are in the "integration_tests" folder. They combine multiple components of the app. Most will have simplified docker files that run necessary isolated components of the app. In conftest.py the paths to the dockerfiles are added to the pytest command line options.
