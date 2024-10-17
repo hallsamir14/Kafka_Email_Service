@@ -1,7 +1,8 @@
 import markdown2
 from pathlib import Path
 
-class TemplateManager():
+
+class TemplateManager:
     def __init__(self):
         # Dynamically determine the root path of the project
         self.root_dir = (

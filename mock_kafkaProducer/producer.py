@@ -32,38 +32,46 @@ from pydantic_settings import BaseSettings
 from datetime import datetime
 import argparse
 
+
 class Settings(BaseSettings):
-    kafka_bootstrap_servers: str = 'localhost:9092'  # Kafka server address
-    commands_topic: str = 'kafka_commands'      # Kafka topic to publish messages
-    poll_interval: float = 0.1                  # Polling interval in seconds for Kafka producer
+    kafka_bootstrap_servers: str = "localhost:9092"  # Kafka server address
+    commands_topic: str = "kafka_commands"  # Kafka topic to publish messages
+    poll_interval: float = 0.1  # Polling interval in seconds for Kafka producer
 
     class Config:
-        env_file = ".env"                       # Configuration file for environment variables
-        env_file_encoding = 'utf-8'
+        env_file = ".env"  # Configuration file for environment variables
+        env_file_encoding = "utf-8"
+
 
 settings = Settings()
 
 # Load logging configuration from a JSON file to setup structured logging
-with open('logging_config.json', 'r') as config_file:
+with open("logging_config.json", "r") as config_file:
     logging_config = json.load(config_file)
     logging.config.dictConfig(logging_config)
 
 logger = logging.getLogger(__name__)
 
 # Initialize Kafka Producer with server and retry configurations
-producer = Producer({
-    'bootstrap.servers': settings.kafka_bootstrap_servers,
-    'acks': 'all',  # Ensure all replicas acknowledge the message
-    'retries': 5,  # Retry up to 5 times
-    'retry.backoff.ms': 300  # Wait 300ms between retries
-})
+producer = Producer(
+    {
+        "bootstrap.servers": settings.kafka_bootstrap_servers,
+        "acks": "all",  # Ensure all replicas acknowledge the message
+        "retries": 5,  # Retry up to 5 times
+        "retry.backoff.ms": 300,  # Wait 300ms between retries
+    }
+)
+
 
 def delivery_report(err, msg):
     """Callback function for message delivery reports."""
     if err:
         logger.error(f"Message delivery failed: {err}")
     else:
-        logger.info(f"Message delivered to {msg.topic()} [{msg.partition()}] @ {msg.offset()}")
+        logger.info(
+            f"Message delivered to {msg.topic()} [{msg.partition()}] @ {msg.offset()}"
+        )
+
 
 async def send_to_kafka(message_content):
     """Asynchronously sends messages to Kafka topic at regular intervals."""
@@ -71,23 +79,31 @@ async def send_to_kafka(message_content):
         message = {
             "uuid": str(uuid.uuid4()),
             "content": message_content,
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
         }
         message_json = json.dumps(message)
         try:
-            producer.produce(settings.commands_topic, message_json, on_delivery=delivery_report)
+            producer.produce(
+                settings.commands_topic, message_json, on_delivery=delivery_report
+            )
             producer.poll(settings.poll_interval)
         except KafkaError as e:
             logger.error(f"Kafka exception occurred: {e}")
         logger.debug(f"Sent message: {message_json}")
         await asyncio.sleep(1)  # Wait before sending the next message
 
+
 def parse_arguments():
     """Parse command line arguments for dynamic message input."""
-    parser = argparse.ArgumentParser(description='Process messages to Kafka.')
-    parser.add_argument('message', nargs='?', default="Hello Kafka! Producer online Here",
-                        help='Message to send to Kafka')
+    parser = argparse.ArgumentParser(description="Process messages to Kafka.")
+    parser.add_argument(
+        "message",
+        nargs="?",
+        default="Hello Kafka! Producer online Here",
+        help="Message to send to Kafka",
+    )
     return parser.parse_args()
+
 
 if __name__ == "__main__":
     args = parse_arguments()
