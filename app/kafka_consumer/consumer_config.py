@@ -1,8 +1,6 @@
 import json
 import logging
 import logging.config
-import signal
-import sys
 from dotenv import load_dotenv
 import os
 
