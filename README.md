@@ -1,5 +1,3 @@
-# Pre-Production Email Testing - Instructions & Configuration
-
 ## Overview
 
 This project provides an email service designed to act as an email plugin module. Developed in Python, this service is tailored for pre-production testing, ensuring that email notifications are correctly formatted, sent, and received before deployment. The service is designed to be implemented within a microservice based application architecture, making it easily integrable and scalable within any application ecosystem requiring email notification capabilities.
@@ -69,6 +67,15 @@ This architecture ensures that the email service is decoupled from the main appl
 
 ## Testing the Application (For Developers):
 
-- **Testing Infrastructure**: Test infrastucture is built using pytest. To run test, simply use the "pytest" command in the terminal. All test are in the "tests" folder.
-- **Integration Test**: Integration test are in the "integration_tests" folder. They combine multiple components of the app. Most will have simplified docker files that run necessary isolated components of the app. In conftest.py the paths to the dockerfiles are added to the pytest command line options.
-- **Robust Testing**: Every functioning module in the app has corresponding test associated.
+- **Testing Infrastructure**: Test infrastucture is built using pytest. To run test, simply run the `pip install -U pytest` and `pytest` commands in the python terminal. All test are in the "tests" folder. Pytest configurations are in `Kafka_Email_Service/pytest.ini`
+  - **Test Classes**
+    - Test classes are implemented for organization purposes. They also allow fixtures containing objects to be passed to each test function.
+    - When running pytest each test will be displayed with a path and test outcome
+      - `tests/emailer_test.py::TestEmail::test_email PASSED`
+      - `(test folder)/(test file)::Class::Function STATUS`
+  - **Pytest Fixtures**
+    - A fixture provides a defined, reliable and consistent context for the tests. We use fixtures here to pass the same data/objects to the other test functions.
+- **Integration Test**: Integration test are in the "integration_tests" folder. They combine multiple components of the app.
+  - Most will have simplified docker files that run necessary isolated components of the app. (E.g. isolated mock database)
+  - In conftest.py the paths to the dockerfiles are added to the pytest command line options for organization and use across multiple files.
+- **Robust Testing**: Every functioning module in the app has corresponding test associated unless said function is marked as private
