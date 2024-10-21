@@ -65,9 +65,22 @@ This architecture ensures that the email service is decoupled from the main appl
      python main.py
      ```
 
-## Testing the Application (For Developers):
+## Unit Testing:
 
-- **Testing Infrastructure**: Test infrastucture is built using pytest. To run test, simply run the `pip install -U pytest` and `pytest` commands in the python terminal. All test are in the "tests" folder. Pytest configurations are in `Kafka_Email_Service/pytest.ini`
+**Tests are made using pytests.**
+
+1. **Install Pytest**
+    ```
+    pip install -U pytest
+    ``` 
+
+
+2. **Run Pytest**
+    - In root of project directory
+    ```
+    pytest
+    ``` 
+All tests are in the "tests" folder. Pytest configurations are in `pytest.ini`
   - **Test Classes**
     - Test classes are implemented for organization purposes. They also allow fixtures containing objects to be passed to each test function.
     - When running pytest each test will be displayed with a path and test outcome
@@ -75,7 +88,7 @@ This architecture ensures that the email service is decoupled from the main appl
       - `(test folder)/(test file)::Class::Function STATUS`
   - **Pytest Fixtures**
     - A fixture provides a defined, reliable and consistent context for the tests. We use fixtures here to pass the same data/objects to the other test functions.
-- **Integration Test**: Integration test are in the "integration_tests" folder. They combine multiple components of the app.
-  - Most will have simplified docker files that run necessary isolated components of the app. (E.g. isolated mock database)
+- **Integration Test**: Integration test are in the "integration_tests" folder. They test components of the app that require some type of interfacing between each other (i.e. database API, kafka consumer, etc.)
+  - Most will have simplified docker files that run necessary isolated components of the app. (E.g. mock database service)
   - In conftest.py the paths to the dockerfiles are added to the pytest command line options for organization and use across multiple files.
 - **Robust Testing**: Every functioning module in the app has corresponding test associated unless said function is marked as private

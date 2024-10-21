@@ -35,20 +35,20 @@ class ConsumerProcessor:
     def __init__(self):
         pass
 
-    def log_message(self, message):
+    def __log_message(self, message):
         """Log the processing of each message."""
         logger.info(f"Processing message: {message}")
 
     
-    def signal_handler(signal, frame, consumer):
+    def __signal_handler(signal, frame, consumer):
         """Graceful shutdown of the consumer on receiving SIGINT or SIGTERM."""
         logger.info("Shutting down consumer...")
         consumer.close()
         sys.exit(0)
 
     # Register signal handlers for graceful termination
-    signal.signal(signal.SIGINT, signal_handler)
-    signal.signal(signal.SIGTERM, signal_handler)
+    signal.signal(signal.SIGINT, __signal_handler)
+    signal.signal(signal.SIGTERM, __signal_handler)
 
 
 
@@ -70,7 +70,7 @@ class ConsumerProcessor:
                 else:
                     # Process the valid message
                     message = msg.value().decode("utf-8")
-                    self.log_message(json.loads(message))
+                    self.__log_message(json.loads(message))
         except Exception as e:
             logger.error(f"An unexpected exception occurred: {e}")
         finally:
